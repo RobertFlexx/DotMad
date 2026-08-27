@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>DotMad</RootNamespace>
+    <AssemblyName>DotMad</AssemblyName>
+    <Optimize>true</Optimize>
+    <TailCalls>true</TailCalls>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Error.fs" />
+    <Compile Include="Expr.fs" />
+    <Compile Include="Token.fs" />
+    <Compile Include="Parser.fs" />
+    <Compile Include="Value.fs" />
+    <Compile Include="NativesUtil.fs" />
+    <Compile Include="Eval.fs" />
+    <Compile Include="Natives.fs" />
+    <Compile Include="NativesOs.fs" />
+    <Compile Include="Stdlib.fs" />
+    <Compile Include="Interpreter.fs" />
+    <Compile Include="LineEditor.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+
+</Project>
