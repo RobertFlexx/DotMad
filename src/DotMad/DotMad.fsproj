@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <Version>1.1.0</Version>
+    <Version>1.1.1</Version>
     
     <Authors>RobertFlexx;Moritisimor</Authors>
     <Description>An embeddable Lisp dialect for .NET</Description>
@@ -29,6 +29,8 @@
     <Compile Include="Interpreter.fs" />
     <Compile Include="LineEditor.fs" />
     <Compile Include="Program.fs" />
+    
+    <None Include="../../README.md" Pack="true"/>
   </ItemGroup>
 
 </Project>
