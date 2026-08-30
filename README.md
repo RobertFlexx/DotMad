@@ -6,6 +6,8 @@ A .NET implementation of [nomad-lisp](https://github.com/Moritisimor/nomad-lisp)
  
 DotMad is a faithful port of the original interpreter: the same syntax, standard library, evaluation order, and familiar errors. It runs on .NET 10 and includes a REPL with line editing and history. Its evaluator is stack-safe, so tail-recursive Nomad programs can run for hundreds of thousands of calls without growing the .NET stack.
 
+You can also find it on NuGet [here](https://www.nuget.org/packages/DotMad).
+
 ## Building
 
 ```bash
@@ -231,7 +233,13 @@ Run any example with:
 dotnet src/DotMad/bin/Release/net10.0/DotMad.dll examples/fib.nomad
 ```
 
-## Embedding guide
+## Embedding guide (with NuGet)
+You can simply add the package to your .NET Project with this command:
+```bash
+dotnet add package DotMad
+```
+
+## Embedding guide (manual)
 
 DotMad can be used as a library inside your own .NET projects. You add a project reference, create an interpreter, evaluate nomad expressions, and read the results back as .NET values.
 
