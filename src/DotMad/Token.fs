@@ -273,7 +273,7 @@ module Tokenizer =
             wrapped[tokenArr.Length + 1] <- Token.RParen
             wrapped[tokenArr.Length + 2] <- Token.Eof
 
-            let (l, r) = countParens wrapped
+            let l, r = countParens wrapped
 
             if l = r then
                 Ok(List.ofArray wrapped)

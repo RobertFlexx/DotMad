@@ -7,7 +7,7 @@ module Eval =
 
     let private coreForms = Dictionary<string, NativeImpl>()
 
-    let mutable private evalFn: (Expr -> Env -> NomadResult<Value>) =
+    let mutable private evalFn: Expr -> Env -> NomadResult<Value> =
         fun _ _ -> Error(NomadError.Eval "eval not initialized")
 
     let eval (expression: Expr) (env: Env) : NomadResult<Value> = evalFn expression env
@@ -202,7 +202,7 @@ module Eval =
                 let bail (e: NomadError) : bool =
                     match e with
                     | NomadError.Eval _ when handlers.Count > 0 ->
-                        let (hExpr, hEnv) = handlers[handlers.Count - 1]
+                        let hExpr, hEnv = handlers[handlers.Count - 1]
                         handlers.RemoveAt(handlers.Count - 1)
                         cursor <- hExpr
                         scope <- hEnv

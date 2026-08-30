@@ -49,7 +49,7 @@ module NativesOs =
                       printLine $"Scope {idx}:"
                       let entries = scope.IterLocal() |> List.sortBy fst
 
-                      for (k, v) in entries do
+                      for k, v in entries do
                           printLine $"\t{k}: {v}"
 
                       current <- scope.ParentOption

@@ -1,7 +1,5 @@
 namespace DotMad
 
-open System
-
 type NomadError =
     | Parse of string
     | Tokenize of string

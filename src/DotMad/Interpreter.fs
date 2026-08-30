@@ -1,7 +1,6 @@
 namespace DotMad
 
 open System
-open System.Collections.Generic
 
 module private InterpreterData =
     let stdlibForms =
@@ -19,10 +18,10 @@ type Interpreter(globalEnv: Env) =
         let argValues = args |> Seq.map (fun a -> Value.String a) |> Array.ofSeq
         env.Set("args", Value.List_(argValues)) |> ignore
 
-        for (name, f) in Natives.coreNatives () do
+        for name, f in Natives.coreNatives () do
             env.Set(name, NativeFun f) |> ignore
 
-        for (name, f) in NativesOs.osNatives () do
+        for name, f in NativesOs.osNatives () do
             env.Set(name, NativeFun f) |> ignore
 
         env.Set("if", NativeFun Eval.coreIfImpl) |> ignore

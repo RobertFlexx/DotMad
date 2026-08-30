@@ -256,7 +256,7 @@ and [<CustomEquality; NoComparison>] Value =
         | RecordVal x, RecordVal y -> Object.ReferenceEquals(x, y)
         | Lambda(pa, ba, ea), Lambda(pb, bb, eb) ->
             pa = pb && Object.ReferenceEquals(ba, bb) && Object.ReferenceEquals(ea, eb)
-        | NativeFun x, NativeFun y -> System.Delegate.Equals(x, y)
+        | NativeFun x, NativeFun y -> Delegate.Equals(x, y)
         | Macro(pa, ba), Macro(pb, bb) -> pa = pb && Object.ReferenceEquals(ba, bb)
         | _ -> false
 
