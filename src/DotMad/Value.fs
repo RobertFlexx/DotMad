@@ -271,6 +271,9 @@ and [<CustomEquality; NoComparison>] Value =
     static member Cons(head: Value, tail: NomadList) : Value = Value.VList(NomadList.Cons(head, tail))
 
     static member Record_() : Value = Value.RecordVal(Record())
+    
+    static member NewValue(value: Value) : NomadResult<Value> = Ok value
+    static member NewError(error: NomadError) : NomadResult<Value> = Error error
 
     override this.ToString() =
         match this with

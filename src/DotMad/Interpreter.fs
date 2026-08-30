@@ -66,6 +66,9 @@ type Interpreter(globalEnv: Env) =
     member _.GetGlobal(name: string) : NomadResult<Value> = globalEnv.Get(name)
 
     member _.RegisterNative(name: string, f: NativeImpl) : NomadResult<unit> = globalEnv.Set(name, NativeFun f)
+    
+    member _.RegisterNativeCS(name: string, f: System.Func<Expr array, Env, NomadResult<Value>>) : NomadResult<unit> =
+        globalEnv.Set(name, NativeFun (FuncConvert.FromFunc(f)))
 
     static member private loadStdlib(env: Env) =
         for parsed in InterpreterData.stdlibForms.Value do
