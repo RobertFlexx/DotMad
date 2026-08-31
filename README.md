@@ -1,6 +1,6 @@
 # DotMad
 
-<img src="./Untitled3x.png" alt="dotmad logo" width="290">
+<img src="https://raw.githubusercontent.com/RobertFlexx/DotMad/main/DotMadLogo.png" alt="dotmad logo" width="290">
 
 A .NET implementation of [nomad-lisp](https://github.com/Moritisimor/nomad-lisp), a small, dynamically typed Lisp.
  
