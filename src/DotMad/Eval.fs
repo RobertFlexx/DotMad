@@ -11,36 +11,71 @@ module Eval =
         fun _ _ -> Error(NomadError.Eval "eval not initialized")
 
     let eval (expression: Expr) (env: Env) : NomadResult<Value> = evalFn expression env
-
+    
+    let evalOrThrow (expression: Expr) (env: Env) : Value =
+        match eval expression env with
+        | Ok v -> v
+        | Error e -> NomadError.throwNomadError e
+    
     let getNumber (expr: Expr) (env: Env) : NomadResult<float> =
         match eval expr env with
         | Ok(Num x) -> Ok x
         | Ok other -> Error(NativesUtil.typeErr "number" expr other)
         | Error e -> Error e
+        
+    let getNumberOrThrow (expr: Expr) (env: Env) : float =
+        match eval expr env with
+        | Ok(Num x) -> x
+        | Error e -> NomadError.throwNomadError e
+        | _ -> NomadError.throwNomadError (NomadError.TypeAssertion "Number Expected")
 
     let getString (expr: Expr) (env: Env) : NomadResult<string> =
         match eval expr env with
         | Ok(Str s) -> Ok s
         | Ok other -> Error(NativesUtil.typeErr "string" expr other)
         | Error e -> Error e
+        
+    let getStringOrThrow (expr: Expr) (env: Env) : string =
+        match eval expr env with
+        | Ok(Str s) -> s
+        | Error e -> NomadError.throwNomadError e
+        | _ -> NomadError.throwNomadError (NomadError.TypeAssertion "String Expected")
 
     let getBool (expr: Expr) (env: Env) : NomadResult<bool> =
         match eval expr env with
         | Ok(Bool b) -> Ok b
         | Ok other -> Error(NativesUtil.typeErr "bool" expr other)
         | Error e -> Error e
+        
+    let getBoolOrThrow (expr: Expr) (env: Env) : bool =
+        match eval expr env with
+        | Ok(Bool b) -> b
+        | Error e -> NomadError.throwNomadError e
+        | _ -> NomadError.throwNomadError (NomadError.TypeAssertion "Bool Expected")
 
     let getList (expr: Expr) (env: Env) : NomadResult<NomadList> =
         match eval expr env with
         | Ok(VList l) -> Ok l
         | Ok other -> Error(NativesUtil.typeErr "list" expr other)
         | Error e -> Error e
+        
+    let getListOrThrow (expr: Expr) (env: Env) : NomadList =
+        match eval expr env with
+        | Ok(VList l) -> l
+        | Error e -> NomadError.throwNomadError e
+        | _ -> NomadError.throwNomadError (NomadError.TypeAssertion "List Expected")
 
     let getRecord (expr: Expr) (env: Env) : NomadResult<Record> =
         match eval expr env with
         | Ok(RecordVal r) -> Ok r
         | Ok other -> Error(NativesUtil.typeErr "record" expr other)
         | Error e -> Error e
+        
+    let getRecordOrThrow (expr: Expr) (env: Env) : Record =
+        match eval expr env with
+        | Ok(RecordVal r) -> r
+        | Error e -> NomadError.throwNomadError e
+        | _ -> NomadError.throwNomadError (NomadError.TypeAssertion "Record Expected")
 
     let predicate (params_: Expr array) (env: Env) (name: string) (f: Value -> bool) : NomadResult<Value> =
         if params_.Length <> 1 then
