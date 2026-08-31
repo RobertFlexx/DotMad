@@ -37,6 +37,11 @@ type Interpreter(globalEnv: Env) =
         match Parser.parseProgram source with
         | Error e -> Error e
         | Ok forms -> Eval.evalSeq forms globalEnv
+        
+    member i.DoStringOrThrow(source: string) : Value =
+        match i.DoString source with
+        | Ok v -> v
+        | Error e -> NomadError.throwNomadError e
 
     member _.DoFile(path: string) : NomadResult<unit> =
         try
@@ -58,6 +63,12 @@ type Interpreter(globalEnv: Env) =
                 last
         with ex ->
             Error(NomadError.Io(ex.Message))
+            
+    member i.DoFileOrThrow(path: string) : unit =
+        match i.DoFile path with
+        | Ok _ -> ()
+        | Error e -> NomadError.throwNomadError e
+        
 
     member _.EvalExpr(expr: Expr) : NomadResult<Value> = Eval.eval expr globalEnv
 
