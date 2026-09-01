@@ -73,15 +73,27 @@ type Interpreter(globalEnv: Env) =
         
 
     member _.EvalExpr(expr: Expr) : NomadResult<Value> = Eval.eval expr globalEnv
+    
+    member i.EvalExprOrThrow(expr: Expr) : Value =
+        match i.EvalExpr expr with
+        | Ok v -> v
+        | Error e -> NomadError.throwNomadError e
 
     member _.GlobalEnv = globalEnv
 
     member _.GetGlobal(name: string) : NomadResult<Value> = globalEnv.Get(name)
+    
+    member i.GetGlobalOrThrow(name: string) : Value =
+        match i.GetGlobal name with
+        | Ok v -> v
+        | Error e -> NomadError.throwNomadError e
 
     member _.RegisterNative(name: string, f: NativeImpl) : NomadResult<unit> = globalEnv.Set(name, NativeFun f)
     
-    member _.RegisterNativeCS(name: string, f: System.Func<Expr array, Env, NomadResult<Value>>) : NomadResult<unit> =
-        globalEnv.Set(name, NativeFun (FuncConvert.FromFunc(f)))
+    member _.RegisterNativeCS(name: string, f: System.Func<Expr array, Env, NomadResult<Value>>) : unit =
+        match globalEnv.Set(name, NativeFun (FuncConvert.FromFunc(f))) with
+        | Ok _ -> ()
+        | Error e -> NomadError.throwNomadError e
 
     static member private loadStdlib(env: Env) =
         for parsed in InterpreterData.stdlibForms.Value do

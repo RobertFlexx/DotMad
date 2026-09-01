@@ -51,6 +51,11 @@ type Env(parent: Env option, capacity: int, slotNames: string array, slotValues:
         match result with
         | ValueSome value -> Ok value
         | ValueNone -> Error(NomadError.Eval("No such variable: " + key))
+        
+    member i.GetOrThrow(key: string) : Value =
+        match i.Get key with
+        | Ok v -> v
+        | Error e -> NomadError.throwNomadError e
 
     member _.Set(key: string, value: Value) : NomadResult<unit> =
         let mutable duplicate = bindings.ContainsKey(key)
@@ -64,6 +69,11 @@ type Env(parent: Env option, capacity: int, slotNames: string array, slotValues:
         else
             bindings[key] <- value
             Ok()
+            
+    member i.SetOrThrow(key: string, value: Value) : unit =
+        match i.Set (key, value) with
+        | Ok _ -> ()
+        | Error e -> NomadError.throwNomadError e
 
     member this.Mutate(key: string, value: Value) : NomadResult<unit> =
         let mutable cur = Some this
@@ -77,13 +87,20 @@ type Env(parent: Env option, capacity: int, slotNames: string array, slotValues:
         if found then
             Ok()
         else
-            Error(NomadError.Eval("Cannot mutate non-existant binding: " + key))
+            Error(NomadError.Eval("Cannot mutate non-existent binding: " + key))
+            
+    member this.MutateOrThrow(key: string, value: Value) : unit =
+        match this.Mutate(key, value) with
+        | Ok _ -> ()
+        | Error e -> NomadError.throwNomadError e
 
     member _.IterLocal() : (string * Value) list =
         let items = ResizeArray<string * Value>(slotNames.Length + bindings.Count)
         for i = 0 to slotNames.Length - 1 do items.Add(slotNames[i], slotValues[i])
         for kv in bindings do items.Add(kv.Key, kv.Value)
         List.ofSeq items
+     
+    member i.IterLocalArray() : (string * Value)[] = i.IterLocal() |> List.toArray
 
     member _.ParentOption = parent
 
