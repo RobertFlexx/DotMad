@@ -15,7 +15,7 @@ type Interpreter(globalEnv: Env) =
     new(args: string seq) =
         Eval.init ()
         let env = Env.Root()
-        let argValues = args |> Seq.map (fun a -> Value.String a) |> Array.ofSeq
+        let argValues = args |> Seq.map Value.String |> Array.ofSeq
         env.Set("args", Value.List_(argValues)) |> ignore
 
         for name, f in Natives.coreNatives () do
@@ -32,6 +32,8 @@ type Interpreter(globalEnv: Env) =
 
         Interpreter.loadStdlib env
         Interpreter(env)
+        
+    static member newEmpty() = Interpreter(Env.New(Env.Root(), 0))
 
     member _.DoString(source: string) : NomadResult<Value> =
         match Parser.parseProgram source with

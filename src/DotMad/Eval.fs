@@ -64,6 +64,18 @@ module Eval =
         | Ok(VList l) -> l
         | Error e -> NomadError.throwNomadError e
         | _ -> NomadError.throwNomadError (NomadError.TypeAssertion "List Expected")
+        
+    let getArray (expr: Expr) (env: Env) : NomadResult<Value[]> =
+        match eval expr env with
+        | Ok(VList l) -> Ok(NomadList.ToVec l)
+        | Ok other -> Error(NativesUtil.typeErr "array" expr other)
+        | Error e -> Error e       
+        
+    let getArrayOrThrow (expr: Expr) (env: Env) : Value[] =
+        match eval expr env with
+        | Ok(VList l) -> NomadList.ToVec l
+        | Ok _ -> NomadError.throwNomadError (NomadError.TypeAssertion "Array Expected")
+        | Error e -> NomadError.throwNomadError e
 
     let getRecord (expr: Expr) (env: Env) : NomadResult<Record> =
         match eval expr env with
