@@ -246,6 +246,31 @@ and [<CustomEquality; NoComparison>] Value =
     | Macro of string array * Expr array
     | Unit
 
+    member v.ToNumOrThrow() = 
+        match v with
+        | Num n -> n
+        | _ -> NomadError.throwNomadError (TypeAssertion "Number expected")
+
+    member v.ToStringOrThrow() =
+        match v with
+        | Str s -> s
+        | _ -> NomadError.throwNomadError (TypeAssertion "String Expected")
+
+    member v.ToBoolOrThrow() =
+        match v with
+        | Bool b -> b
+        | _ -> NomadError.throwNomadError (TypeAssertion "Bool Expected")
+
+    member v.ToArrayOrThrow() =
+        match v with
+        | VList l -> NomadList.ToVec l
+        | _ -> NomadError.throwNomadError (TypeAssertion "List Expected")
+
+    member v.ToRecordOrThrow() =
+        match v with
+        | RecordVal r -> r
+        | _ -> NomadError.throwNomadError (TypeAssertion "Record Expected")
+
     override this.Equals(other) =
         match other with
         | :? Value as other -> Value.equals this other
